@@ -176,7 +176,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 30
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -200,7 +200,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 40, y: 25, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -635,5 +635,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapWidth: 90
   mapHeight: 50
+  maxRoomSize: 10
+  minRoomSize: 5
+  maxNumberOfRooms: 50
   floorTileObject: {fileID: 2618266286032214024, guid: 01a648a30267f114f807780e99ac1b14, type: 3}
   wallTileObject: {fileID: 2618266286032214024, guid: a3393a9be3a7e1d4086c42167b9a9862, type: 3}
