@@ -6,10 +6,11 @@ public class InputManager : MonoBehaviour
 {
     float timer;
     [SerializeField] Entity player;
+    GameMap gameMap;
 
     private void Awake()
     {
-        
+        gameMap = FindObjectOfType<GameMap>();
     }
 
 
@@ -81,6 +82,7 @@ public class InputManager : MonoBehaviour
         if (Input.anyKey)
         {
             timer = 0;
+            gameMap.FOV();//switch to player turn end
         }
 
     }

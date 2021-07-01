@@ -20,14 +20,20 @@ public class GameMap : MonoBehaviour
     public int minRoomSize = 5;
     public int maxNumberOfRooms = 50;
 
+    public int fovRadius;
+
     int numberOfRooms;
 
     [SerializeField] GameObject tileObject;
 
     public Tile[,] map;
 
+    public GameObject player;
+
     private void Awake()
     {
+        player = GameObject.Find("Player");//going to create and place later
+
         map = new Tile[mapWidth, mapHeight];
 
         InstantiateTiles();
@@ -49,7 +55,7 @@ public class GameMap : MonoBehaviour
                 }
             }
             timer.Stop();
-            Debug.Log("Clearing map took:" + timer.Elapsed);            
+            Debug.Log("Clearing map took:" + timer.Elapsed);
 
             MakeMap(maxNumberOfRooms, minRoomSize, maxRoomSize, mapWidth, mapHeight);
         }
@@ -92,7 +98,7 @@ public class GameMap : MonoBehaviour
                     Mathf.RoundToInt(newRoom.yMin + 1),
                     Mathf.RoundToInt(newRoom.width - 2),
                     Mathf.RoundToInt(newRoom.height - 2));
-                CreateRoom(newRoomRect);                
+                CreateRoom(newRoomRect);
 
                 //center of room for tunnels
                 int newX = Mathf.RoundToInt(newRoomRect.center.x);
@@ -100,7 +106,7 @@ public class GameMap : MonoBehaviour
 
                 if (numberOfRooms == 0)
                 {
-                    //place player
+                    player.transform.position = new Vector2((int)newRoomRect.center.x, (int)newRoomRect.center.y);
                 }
                 else
                 {
@@ -123,11 +129,14 @@ public class GameMap : MonoBehaviour
                 }
                 numberOfRooms++;
                 rooms.Add(newRoom);
-            }            
+            }
         }
 
         timer.Stop();
         Debug.Log("Creating map took:" + timer.Elapsed);
+
+        ClearVisibleTiles();
+        FOV();
     }
 
 
@@ -177,7 +186,7 @@ public class GameMap : MonoBehaviour
     {
         for (int y = Mathf.Min(y1, y2); y < Mathf.Max(y1, y2) + 1; y++)
         {
-            map[x, y].SetToFloor();   
+            map[x, y].SetToFloor();
         }
     }
 
@@ -189,5 +198,79 @@ public class GameMap : MonoBehaviour
         }
         else { return false; }
     }
-}
 
+
+    float degToRad = Mathf.PI / 100;
+
+    public int DiagDistance(int x, int y, int x1, int y1)
+    {
+        return (int)Vector2.Distance(new Vector2(x, y), new Vector2(x1, y1));
+    }
+
+
+    /// <summary>
+    /// FOV credit to http://www.roguebasin.com/index.php/Eligloscode Raycasting
+    /// </summary>
+    public void FOV()
+    {
+        ClearVisibleTiles();
+
+        float x, y;
+        for (int i = 0; i < 360; i++)
+        {
+            x = (float)Math.Cos(i * .01745f);
+            y = (float)Math.Sin(i * .01745f);
+            DoFov(x, y);
+        }
+        RenderTiles();
+    }
+
+    void DoFov(float x, float y)
+    {
+        float ox, oy;
+        ox = (float)player.transform.position.x + .5f;
+        oy = (float)player.transform.position.y + .5f;
+        for (int i = 0; i < fovRadius; i++)
+        {
+            map[(int)ox, (int)oy].visible = true;
+            map[(int)ox, (int)oy].explored = true;
+            if (map[(int)ox, (int)oy].isWall)
+            {
+                return;
+            }
+            ox += x;
+            oy += y;
+        }
+    }
+
+    void ClearVisibleTiles()
+    {
+        for (int x = 0; x < mapWidth; x++)
+        {
+            for (int y = 0; y < mapHeight; y++)
+            {
+                map[x, y].visible = false;
+                //map[x, y].hasEntity = false;
+                //map[x, y].walkable = true;
+            }
+        }
+    }
+
+
+        void RenderTiles()//don't render whole map?
+    {
+        timer = new Stopwatch();
+        timer.Start();
+
+        for (int x = 0; x < mapWidth; x++)
+        {
+            for (int y = 0; y < mapHeight; y++)
+            {
+                map[x, y].UpdateTile();
+            }
+        }
+
+        timer.Stop();
+        Debug.Log("Render took:" + timer.Elapsed);
+    }
+}

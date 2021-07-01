@@ -267,5 +267,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: 
-  backgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  litWall: {r: 0.6132076, g: 0.6132076, b: 0.6132076, a: 1}
+  unlitWall: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 1}
+  litFloor: {r: 0.8396226, g: 0.8396226, b: 0.8396226, a: 1}
+  unlitFloor: {r: 0.41509432, g: 0.40138838, b: 0.40138838, a: 1}
   characterColor: {r: 0, g: 0, b: 0, a: 1}
+  walkable: 0
+  isWall: 0
+  transparent: 0
+  visible: 0
+  explored: 0
