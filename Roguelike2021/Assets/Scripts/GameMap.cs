@@ -6,6 +6,7 @@ using UnityEngine;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
+using TMPro;
 
 public class GameMap : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class GameMap : MonoBehaviour
     public int maxRoomSize = 10;
     public int minRoomSize = 5;
     public int maxNumberOfRooms = 50;
+    public int maxMonstersPerRoom = 3;
 
     public int fovRadius;
 
@@ -30,9 +32,18 @@ public class GameMap : MonoBehaviour
 
     public GameObject player;
 
+    [Tooltip("Place enemy gameobjects here")]
+    public GameObject[] enemy;
+
+    public List<GameObject> entities = new List<GameObject>();
+
+    GameStates gameStates;
+
+
     private void Awake()
     {
         player = GameObject.Find("Player");//going to create and place later
+        gameStates = FindObjectOfType<GameStates>();
 
         map = new Tile[mapWidth, mapHeight];
 
@@ -107,6 +118,7 @@ public class GameMap : MonoBehaviour
                 if (numberOfRooms == 0)
                 {
                     player.transform.position = new Vector2((int)newRoomRect.center.x, (int)newRoomRect.center.y);
+                    entities.Add(player);
                 }
                 else
                 {
@@ -127,6 +139,9 @@ public class GameMap : MonoBehaviour
                         CreateHorizontalTunnel(prevX, newX, newY);
                     }
                 }
+
+                PlaceEntities(newRoomRect);
+
                 numberOfRooms++;
                 rooms.Add(newRoom);
             }
@@ -146,7 +161,7 @@ public class GameMap : MonoBehaviour
         {
             for (int y = 0; y < mapHeight; y++)
             {
-                GameObject newTile = Instantiate(tileObject, new Vector2(x, y), Quaternion.identity, gameObject.transform);
+                GameObject newTile = Instantiate(tileObject, new Vector2(x, y), Quaternion.identity, gameObject.transform.GetChild(0));
                 map[x, y] = newTile.GetComponent<Tile>();
             }
         }
@@ -161,7 +176,6 @@ public class GameMap : MonoBehaviour
             }
         }
     }
-
 
     void CreateRoom(RectInt rectInt)
     {
@@ -190,17 +204,57 @@ public class GameMap : MonoBehaviour
         }
     }
 
-    public bool isBlocked(int x, int y)
+    void PlaceEntities(RectInt rectInt)
     {
-        if (!map[x, y].walkable)
+        for (int i = 0; i <= Random.Range(0, maxMonstersPerRoom); i++)
         {
-            return true;
+            int x = Random.Range(rectInt.x, rectInt.x + rectInt.width);
+            int y = Random.Range(rectInt.y, rectInt.y + rectInt.height);
+
+            foreach (GameObject entity in entities)
+            {
+                if(entity.transform.position.x == x && entity.transform.position.y == y) { return; }
+            }
+
+            {
+                if (Random.Range(0, 100) > 80)
+                {
+                    CreateEntity(x, y, 1);
+                }
+                else
+                {
+                    CreateEntity(x, y, 0);
+                }
+            }
         }
-        else { return false; }
+    }
+
+    void CreateEntity(int x, int y, int entityNumber)
+    {
+        GameObject entity = Instantiate(enemy[entityNumber], new Vector2(x, y), Quaternion.identity, gameObject.transform.GetChild(1));
+        entity.name = enemy[entityNumber].name;
+        //entity.entityNumber = entityNumber;
+
+        entities.Add(entity);
     }
 
 
-    float degToRad = Mathf.PI / 100;
+    public Tuple<bool, string> IsBlocked(int x, int y)
+    {
+        if (!map[x, y].walkable) { return Tuple.Create(true, map[x,y].name); }
+        else
+        {
+            foreach (GameObject entity in entities)
+            {
+                if (entity.transform.position.x == x && entity.transform.position.y == y)
+                {
+                    return Tuple.Create(true, entity.name);
+                }
+            }
+            return Tuple.Create(false, "");
+        }
+    }
+
 
     public int DiagDistance(int x, int y, int x1, int y1)
     {
@@ -257,20 +311,47 @@ public class GameMap : MonoBehaviour
     }
 
 
-        void RenderTiles()//don't render whole map?
+    void RenderTiles()//don't render whole map?
     {
         timer = new Stopwatch();
         timer.Start();
+
+        foreach (GameObject entity in entities)
+        {
+            entity.GetComponent<TextMeshPro>().enabled = false;
+        }
 
         for (int x = 0; x < mapWidth; x++)
         {
             for (int y = 0; y < mapHeight; y++)
             {
                 map[x, y].UpdateTile();
+                if(map[x,y].visible)
+                {
+                    foreach (GameObject entity in entities)
+                    {
+                        if (entity.transform.position.x == x && entity.transform.position.y == y)
+                        {
+                            entity.GetComponent<TextMeshPro>().enabled = true;
+                        }                        
+                    }
+                }
             }
         }
 
         timer.Stop();
         Debug.Log("Render took:" + timer.Elapsed);
+    }
+
+
+    //move to engine/own script?
+    public void EnemyTurn()
+    {
+        foreach (GameObject entity in entities)
+        {
+            Debug.Log("The " + entity.name + " ponders the meaning of its life.");
+        }
+
+        gameStates.gameState = GameStates.GameState.PlayerTurn;
     }
 }

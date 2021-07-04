@@ -9,10 +9,12 @@ public class Entity : MonoBehaviour
     [SerializeField] Color color = Color.white;
 
     GameMap gameMap;
+    GameStates gameStates;
 
     private void Awake()
     {
         gameMap = FindObjectOfType<GameMap>();
+        gameStates = FindObjectOfType<GameStates>();
 
         TextMeshPro textMeshPro = GetComponent<TextMeshPro>();
         textMeshPro.text = chararacter;
@@ -21,12 +23,13 @@ public class Entity : MonoBehaviour
 
     public void Move(int x, int y)
     {
-        if(gameMap.isBlocked((int)gameObject.transform.position.x + x, (int)gameObject.transform.position.y + y))
+        if(gameMap.IsBlocked((int)gameObject.transform.position.x + x, (int)gameObject.transform.position.y + y).Item1)
         {
-            Debug.Log("tile blocked");
+            Debug.Log("Tile blocked by " + gameMap.IsBlocked((int)gameObject.transform.position.x + x, (int)gameObject.transform.position.y + y).Item2);
             return;
         }
         gameObject.transform.position = new Vector2(gameObject.transform.position.x + x, gameObject.transform.position.y + y);
+        gameStates.gameState = GameStates.GameState.EnemyTurn;
+        gameMap.EnemyTurn();
     }
-
 }

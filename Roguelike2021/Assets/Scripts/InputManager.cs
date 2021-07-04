@@ -7,10 +7,12 @@ public class InputManager : MonoBehaviour
     float timer;
     [SerializeField] Entity player;
     GameMap gameMap;
+    GameStates gameStates;
 
     private void Awake()
     {
         gameMap = FindObjectOfType<GameMap>();
+        gameStates = FindObjectOfType<GameStates>();
     }
 
 
@@ -25,7 +27,7 @@ public class InputManager : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if (timer > .2)
+        if (timer > .2 && gameStates.gameState == GameStates.GameState.PlayerTurn)
         {
             PlayerMovement();
         }

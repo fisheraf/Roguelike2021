@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 public class Tile : MonoBehaviour
-{
+{    
     [SerializeField] string character = null;
     [SerializeField] Color litWall;
     [SerializeField] Color unlitWall;
@@ -74,11 +74,13 @@ public class Tile : MonoBehaviour
     public void SetToFloor()
     {
         UpdateTile(".", new Color32(155, 155, 155, 255), Color.black, true);
+        name = "Floor";
         isWall = false;
     }
     public void SetToWall()
     {
         UpdateTile("#", new Color32(105, 105, 105, 255), Color.black, false);
+        name = "Wall";
         isWall = true;
     }
 }
