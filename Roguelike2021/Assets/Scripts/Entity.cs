@@ -23,12 +23,26 @@ public class Entity : MonoBehaviour
 
     public void Move(int x, int y)
     {
-        if(gameMap.IsBlocked((int)gameObject.transform.position.x + x, (int)gameObject.transform.position.y + y).Item1)
+        Vector2Int targetTile = new Vector2Int((int)transform.position.x + x, (int)transform.position.y + y);
+
+
+        if(gameMap.IsBlocked(targetTile.x, targetTile.y).Item1)
         {
-            Debug.Log("Tile blocked by " + gameMap.IsBlocked((int)gameObject.transform.position.x + x, (int)gameObject.transform.position.y + y).Item2);
+            foreach (GameObject entity in gameMap.entities)
+            {
+                if(targetTile.x == entity.transform.position.x && targetTile.y == entity.transform.position.y)
+                {
+                    Debug.Log("You tickle the " + entity.name + ".");
+
+                    gameStates.gameState = GameStates.GameState.EnemyTurn;
+                    gameMap.EnemyTurn();
+                    return;
+                }
+            }
+            Debug.Log("Tile blocked by " + gameMap.IsBlocked(targetTile.x, targetTile.y).Item2 + ".");
             return;
         }
-        gameObject.transform.position = new Vector2(gameObject.transform.position.x + x, gameObject.transform.position.y + y);
+        gameObject.transform.position = new Vector2(targetTile.x, targetTile.y);
         gameStates.gameState = GameStates.GameState.EnemyTurn;
         gameMap.EnemyTurn();
     }
