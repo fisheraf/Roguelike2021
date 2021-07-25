@@ -218,6 +218,7 @@ GameObject:
   - component: {fileID: 602708438}
   - component: {fileID: 602708437}
   - component: {fileID: 602708436}
+  - component: {fileID: 602708440}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -239,6 +240,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chararacter: '@'
   color: {r: 0.24292453, g: 0.81130934, b: 0.9716981, a: 1}
+  hasActed: 1
+  isDead: 0
 --- !u!114 &602708437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,7 +383,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 602708435}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -391,6 +394,26 @@ RectTransform:
   m_AnchoredPosition: {x: 15, y: 15}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &602708440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602708435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3a6614d1861fa640a5f0eac95a81bdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHP: 100
+  bonusMaxHP: 0
+  HP: 100
+  baseDefense: 0
+  bonusDefense: 0
+  basePower: 5
+  bonusPower: 0
+  XP: 0
 --- !u!1 &1521712372
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,6 +455,9 @@ GameObject:
   - component: {fileID: 1990572268}
   - component: {fileID: 1990572267}
   - component: {fileID: 1990572269}
+  - component: {fileID: 1990572274}
+  - component: {fileID: 1990572273}
+  - component: {fileID: 1990572271}
   - component: {fileID: 1990572270}
   m_Layer: 0
   m_Name: Engine
@@ -461,7 +487,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1990572266}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.4734343, y: 0.52572334, z: -0.54129857}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1521712373}
@@ -503,7 +529,47 @@ MonoBehaviour:
   m_GameObject: {fileID: 1990572266}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb08f75a4cc44fd4e9769fc6db564328, type: 3}
+  m_Script: {fileID: 11500000, guid: 880dc7cf703105346803dbe0cc82f011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1990572271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990572266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc5dba4e499cbc9489c5f817034c1165, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1990572273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990572266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9c7c2e194995b5459cd49b7164135e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayGridGizmos: 1
+  gridWorldSize: {x: 90, y: 50}
+  nodeRadius: 0.45
+  gameMap: {fileID: 1990572269}
+--- !u!114 &1990572274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990572266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91bccac660316fa4fb039caa1aa6801a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gameState: 0

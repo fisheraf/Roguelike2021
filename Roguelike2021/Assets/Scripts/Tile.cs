@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+[SerializeField]
 public class Tile : MonoBehaviour
 {    
     [SerializeField] string character = null;

@@ -30,6 +30,8 @@ public class GameMap : MonoBehaviour
 
     public Tile[,] map;
 
+    Grid2 grid2;
+
     public GameObject player;
 
     [Tooltip("Place enemy gameobjects here")]
@@ -43,6 +45,7 @@ public class GameMap : MonoBehaviour
     private void Awake()
     {
         player = GameObject.Find("Player");//going to create and place later
+        grid2 = GetComponent<Grid2>();
         gameStates = FindObjectOfType<GameStates>();
 
         map = new Tile[mapWidth, mapHeight];
@@ -152,6 +155,9 @@ public class GameMap : MonoBehaviour
 
         ClearVisibleTiles();
         FOV();
+        SetWalkable();
+        grid2.CreateGrid();
+        UpdateWalkable();     
     }
 
 
@@ -340,18 +346,42 @@ public class GameMap : MonoBehaviour
         }
 
         timer.Stop();
-        Debug.Log("Render took:" + timer.Elapsed);
+        //Debug.Log("Render took:" + timer.Elapsed);
     }
 
 
-    //move to engine/own script?
-    public void EnemyTurn()
+    public void SetWalkable()
     {
-        foreach (GameObject entity in entities)
+        foreach (Tile t in map)
         {
-            Debug.Log("The " + entity.name + " ponders the meaning of its life.");
+            if (t.isWall)
+            {
+                t.walkable = false;
+            }
+            else
+            {
+                t.walkable = true;
+            }
+        }
+    }
+
+    public void UpdateWalkable()
+    {
+        foreach (Tile t in map)
+        {
+            if(!t.isWall)  
+            {
+                t.walkable = true;
+            }        
         }
 
-        gameStates.gameState = GameStates.GameState.PlayerTurn;
+        foreach (GameObject entity in entities)
+        {
+            if(entity.name == "Player") { continue; }
+            
+            map[(int)entity.transform.position.x, (int)entity.transform.position.y].walkable = false;
+        }
+
+        grid2.UpdateGrid();
     }
 }

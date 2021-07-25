@@ -58,7 +58,7 @@ public class InputManager : MonoBehaviour
         //wait
         if (Input.GetKeyDown(KeyCode.Keypad5))
         {
-
+            player.Move(0, 0);
         }
         //right
         if (Input.GetKey(KeyCode.Keypad6))
@@ -86,6 +86,5 @@ public class InputManager : MonoBehaviour
             timer = 0;
             gameMap.FOV();//switch to player turn end
         }
-
     }
 }

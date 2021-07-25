@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 8084699185960573539}
   - component: {fileID: 8084699185960573852}
   - component: {fileID: 8084699185960573853}
+  - component: {fileID: -7195475334458677109}
+  - component: {fileID: 3104002081682644412}
   m_Layer: 0
   m_Name: Orc
   m_TagString: Untagged
@@ -185,3 +187,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chararacter: O
   color: {r: 0.08766074, g: 0.2830189, b: 0, a: 1}
+  hasActed: 1
+  isDead: 0
+--- !u!114 &-7195475334458677109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8084699185960573854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcf036bf5729c944e817f4fb54556a4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  speed: 1
+  path: []
+--- !u!114 &3104002081682644412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8084699185960573854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3a6614d1861fa640a5f0eac95a81bdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHP: 16
+  bonusMaxHP: 0
+  HP: 16
+  baseDefense: 1
+  bonusDefense: 0
+  basePower: 4
+  bonusPower: 0
+  XP: 0
