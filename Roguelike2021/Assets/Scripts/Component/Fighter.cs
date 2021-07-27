@@ -5,7 +5,7 @@ using TMPro;
 
 public class Fighter : MonoBehaviour
 {
-    public int MaxHP;
+    public int maxHP;
     int baseMaxHP;
     public int bonusMaxHP;
     public int HP;
@@ -20,11 +20,11 @@ public class Fighter : MonoBehaviour
 
     public int XP;
 
-    //UIManager uiManager;
+    UIManager uiManager;
 
     private void Awake()
     {
-        //uiManager = FindObjectOfType<UIManager>();
+        uiManager = FindObjectOfType<UIManager>();
     }
 
 
@@ -35,7 +35,7 @@ public class Fighter : MonoBehaviour
         HP -= damage;
         if (name == "Player")        {
             
-            //uiManager.SetUIText();
+            uiManager.SetPlayerHealth(HP, maxHP);
         }
 
         if (HP <= 0)
@@ -62,24 +62,25 @@ public class Fighter : MonoBehaviour
 
         if (damage > 0)
         {
-            Debug.Log(target.name + " takes " + damage + " damage from " + GetComponent<Entity>().name + ".");
-            //uiManager.NewMessage(target.name + " " + "takes<size=200%><voffset=-.2em><#FF6C11> " + damage + "</size></voffset></color> damage from " + this.GetComponent<Entity>().name + ".");
+            //Debug.Log(target.name + " takes " + damage + " damage from " + GetComponent<Entity>().name + ".");
+            //uiManager.NewMessage(target.name + " " + "takes<size=200%><voffset=-.2em><#FF6C11> " + damage + "</size></voffset></color> damage from " + this.GetComponent<Entity>().name + ".");uiManager.NewMessage(target.name + " " + "takes<size=200%><voffset=-.2em><#FF6C11> " + damage + "</size></voffset></color> damage from " + this.GetComponent<Entity>().name + ".");
+            uiManager.NewMessage(target.name + " " + "takes " + damage + " damage from " + this.GetComponent<Entity>().name + ".");
             //add kills message
             target.takeDamage(damage);
         }
         else
         {
-            Debug.Log(GetComponent<Entity>().name + " attacks " + target + " but deals no damage.");
-            //uiManager.NewMessage(this.GetComponent<Entity>().name + " attacks " + target.name + " but deals no damage.");
+            //Debug.Log(GetComponent<Entity>().name + " attacks " + target + " but deals no damage.");
+            uiManager.NewMessage(this.GetComponent<Entity>().name + " attacks " + target.name + " but deals no damage.");
         }
     }
 
     public void heal(int amount)
     {
         HP = HP + amount;
-        if (HP > MaxHP)
+        if (HP > maxHP)
         {
-            HP = MaxHP;
+            HP = maxHP;
         }
         
         //uiManager.SetUIText();

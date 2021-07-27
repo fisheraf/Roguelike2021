@@ -156,7 +156,7 @@ public class GameMap : MonoBehaviour
         ClearVisibleTiles();
         FOV();
         SetWalkable();
-        grid2.CreateGrid();
+        grid2.CreateGrid();        
         UpdateWalkable();     
     }
 

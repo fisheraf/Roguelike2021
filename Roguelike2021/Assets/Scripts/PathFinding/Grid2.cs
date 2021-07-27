@@ -18,12 +18,6 @@ public class Grid2 : MonoBehaviour
     {
         gameMap = FindObjectOfType<GameMap>();
         nodeDiameter = nodeRadius * 2;
-        gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
-        gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
-        //CreateGrid();
-
-        gridSizeX = gameMap.mapWidth;
-        gridSizeY = gameMap.mapHeight;
     }
 
     public int MaxSize
@@ -35,7 +29,10 @@ public class Grid2 : MonoBehaviour
     }
 
     public void CreateGrid()
-    {        
+    {
+        gridSizeX = gameMap.mapWidth;
+        gridSizeY = gameMap.mapHeight;
+
         grid = new Node[gridSizeX, gridSizeY];
         Vector3 worldBottomLeft = new Vector3(0, 0, -1f);
 
