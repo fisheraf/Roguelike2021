@@ -32,7 +32,7 @@ public class Unit : MonoBehaviour
 
     public void OnDrawGizmos()
     {
-        if (path != null)
+        if (path != null && !entity.isDead)
         {
             for (int i = targetIndex; i < path.Length; i++)
             {

@@ -11,17 +11,13 @@ public class Entity : MonoBehaviour
     public bool hasActed = true;
     public bool isDead = false;
 
-    GameMap gameMap;
-    GameStates gameStates;
-    EnemyManager enemyManager;
+    Engine engine;
 
     TextMeshPro textMeshPro;
 
     private void Awake()
     {
-        gameMap = FindObjectOfType<GameMap>();
-        gameStates = FindObjectOfType<GameStates>();
-        enemyManager = FindObjectOfType<EnemyManager>();
+        engine = FindObjectOfType<Engine>();
 
         textMeshPro = GetComponent<TextMeshPro>();
 
@@ -35,36 +31,33 @@ public class Entity : MonoBehaviour
 
 
         //if(gameMap.IsBlocked(targetTile.x, targetTile.y).Item1)
-        if(!gameMap.map[targetTile.x, targetTile.y].walkable)
+        if(!engine.gameMap.map[targetTile.x, targetTile.y].walkable)
         {
-            foreach (GameObject entity in gameMap.entities)
+            foreach (GameObject entity in engine.gameMap.entities)
             {
                 if(targetTile.x == entity.transform.position.x && targetTile.y == entity.transform.position.y)
                 {
                     if (entity.name == "Player")
                     {
                         Debug.Log("The player bides its time...");
-                        gameStates.gameState = GameStates.GameState.EnemyTurn;
-                        enemyManager.EnemyTurn();
+                        engine.gameStates.ChangeGameState(GameStates.GameState.EnemyTurn);
                         return;
                     }
 
-                    Debug.Log("You tickle the " + entity.name + ".");
+                    //Debug.Log("You tickle the " + entity.name + ".");
                     GetComponent<Fighter>().attack(entity.GetComponent<Fighter>());
 
-                    gameStates.gameState = GameStates.GameState.EnemyTurn;
-                    enemyManager.EnemyTurn();
+                    engine.gameStates.ChangeGameState(GameStates.GameState.EnemyTurn);
                     return;
                 }
             }
-            Debug.Log("Tile blocked by " + gameMap.IsBlocked(targetTile.x, targetTile.y).Item2 + ".");
+            Debug.Log("Tile blocked by " + engine.gameMap.IsBlocked(targetTile.x, targetTile.y).Item2 + ".");
             return;
         }
         
-        gameObject.transform.position = new Vector3(targetTile.x, targetTile.y, -5);        
+        gameObject.transform.position = new Vector3(targetTile.x, targetTile.y, -5);
 
-        gameStates.gameState = GameStates.GameState.EnemyTurn;
-        enemyManager.EnemyTurn();
+        engine.gameStates.ChangeGameState(GameStates.GameState.EnemyTurn);
     }
 
     public void KillEntity()
@@ -73,9 +66,9 @@ public class Entity : MonoBehaviour
         textMeshPro.color = Color.red;
 
         name = "Dead " + name;
-        gameMap.entities.Remove(this.gameObject);
+        engine.gameMap.entities.Remove(this.gameObject);
         //FindObjectOfType<GameMap>().deadEntities.Add(gameObject);
         isDead = true;
-        gameMap.UpdateWalkable();
+        engine.gameMap.UpdateWalkable();
     }
 }

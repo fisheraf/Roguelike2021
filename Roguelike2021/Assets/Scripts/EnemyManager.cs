@@ -5,10 +5,9 @@ using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 public class EnemyManager : MonoBehaviour
-{    
-    GameMap gameMap;
+{
+    Engine engine;
     Grid2 grid2;
-    GameStates gameStates;
 
     List<GameObject> entities;
     GameObject player;
@@ -16,12 +15,11 @@ public class EnemyManager : MonoBehaviour
 
     private void Start()
     {
-        gameMap = FindObjectOfType<GameMap>();
+        engine = GetComponent<Engine>();
         grid2 = FindObjectOfType<Grid2>();
-        gameStates = FindObjectOfType<GameStates>();
 
-        entities = gameMap.entities;
-        player = gameMap.player;
+        entities = engine.gameMap.entities;
+        player = engine.player;
     }
 
 
@@ -39,7 +37,7 @@ public class EnemyManager : MonoBehaviour
                 //Debug.Log("The " + entity + " ponders the meaning of life.");
                 entity.GetComponent<Entity>().hasActed = false;
 
-                if (gameMap.map[(int)entity.transform.position.x, (int)entity.transform.position.y].visible)
+                if (engine.gameMap.map[(int)entity.transform.position.x, (int)entity.transform.position.y].visible)
                 {
                     bool playerInRange = false;
                     
@@ -66,14 +64,14 @@ public class EnemyManager : MonoBehaviour
                         {
                             entity.transform.position = entity.GetComponent<Unit>().path[0];
                         }
-                        gameMap.UpdateWalkable();
+                        engine.gameMap.UpdateWalkable();
                         entity.GetComponent<Entity>().hasActed = true;
                         continue;
                     }                    
                 }
             }
-        }
-        gameStates.gameState = GameStates.GameState.PlayerTurn;
+        }        
+        engine.gameStates.ChangeGameState(GameStates.GameState.PlayerTurn);
         sw.Stop();
         Debug.Log("Enemy turn took:" + sw.Elapsed);
     }

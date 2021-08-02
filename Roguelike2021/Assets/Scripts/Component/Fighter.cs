@@ -82,7 +82,6 @@ public class Fighter : MonoBehaviour
         {
             HP = maxHP;
         }
-        
-        //uiManager.SetUIText();
+        uiManager.SetPlayerHealth(HP, maxHP);
     }
 }

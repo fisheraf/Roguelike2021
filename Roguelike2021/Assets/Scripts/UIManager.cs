@@ -6,14 +6,19 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] GameMap gameMap;
+    public Engine engine;
 
     public TextMeshProUGUI[] messageLog;
 
     public Slider healthSlider;
     public TextMeshProUGUI healthValues;
     public TextMeshProUGUI entityText;
-    
+
+
+    private void Start()
+    {
+        engine = GetComponent<Engine>();
+    }
 
     private void Update()
     {
@@ -41,14 +46,16 @@ public class UIManager : MonoBehaviour
         Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //fixed center issue
         worldPoint = new Vector3(worldPoint.x + .5f, worldPoint.y + .5f);
+        Vector2Int worldPointInt = new Vector2Int((int)worldPoint.x, (int)worldPoint.y);
+        worldPoint = new Vector3(worldPointInt.x, worldPointInt.y);
         bool mouseIsOverSomething = false;
 
         //foreach player, item, dead entity other object that dont have entity
-        foreach (GameObject entity in gameMap.entities)
+        foreach (GameObject entity in engine.gameMap.entities)
         {
-            if (entity.transform.position.x == (int)worldPoint.x && entity.transform.position.y == (int)worldPoint.y)
-            {
-                if (gameMap.map[(int)worldPoint.x, (int)worldPoint.y].visible)
+            if (entity.transform.position.Equals(worldPoint))
+            {                
+                if (engine.gameMap.map[worldPointInt.x, worldPointInt.y].visible)
                 {
                     MouseOverText(entity.GetComponent<Entity>().name);
                     mouseIsOverSomething = true;
@@ -57,19 +64,32 @@ public class UIManager : MonoBehaviour
                 }
             }
         }
-        /*foreach (GameObject item in items)
+        foreach (GameObject item in engine.gameMap.items)
         {
-            if (item.transform.position.x == (int)worldPoint.x && item.transform.position.y == (int)worldPoint.y)
+            if (item.transform.position.Equals(worldPoint))
             {
-                if (gameMap.tileVisible[(int)worldPoint.x, (int)worldPoint.y])
+                if (engine.gameMap.map[worldPointInt.x, worldPointInt.y].visible)
                 {
-                    uiManager.MouseOverText(item.GetComponent<Item>().name);
+                    MouseOverText(item.GetComponent<Item>().name);
                     mouseIsOverSomething = true;
 
                     //flavor text?
                 }
             }
         }
+        foreach (GameObject item in engine.inventory.inventory)
+        {
+            if (item.transform.position.Equals(worldPoint))
+            {
+                MouseOverText(item.GetComponent<Item>().name);
+                mouseIsOverSomething = true;
+
+                //flavor text?
+            }
+        }
+
+
+        /*
         foreach (GameObject deadEntity in deadEntities)
         {
             if (deadEntity.transform.position.x == (int)worldPoint.x && deadEntity.transform.position.y == (int)worldPoint.y)

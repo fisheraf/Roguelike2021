@@ -21,6 +21,7 @@ public class GameMap : MonoBehaviour
     public int minRoomSize = 5;
     public int maxNumberOfRooms = 50;
     public int maxMonstersPerRoom = 3;
+    public int maxItemsPerRoom = 3;
 
     public int fovRadius;
 
@@ -35,18 +36,19 @@ public class GameMap : MonoBehaviour
     public GameObject player;
 
     [Tooltip("Place enemy gameobjects here")]
-    public GameObject[] enemy;
+    public GameObject[] enemyPrefab;
+    public GameObject[] itemPrefab;
 
     public List<GameObject> entities = new List<GameObject>();
+    public List<GameObject> items = new List<GameObject>();
 
-    GameStates gameStates;
-
+    Engine engine;
 
     private void Awake()
     {
         player = GameObject.Find("Player");//going to create and place later
         grid2 = GetComponent<Grid2>();
-        gameStates = FindObjectOfType<GameStates>();
+        engine = GetComponent<Engine>();
 
         map = new Tile[mapWidth, mapHeight];
 
@@ -144,6 +146,7 @@ public class GameMap : MonoBehaviour
                 }
 
                 PlaceEntities(newRoomRect);
+                PlaceItems(newRoomRect);
 
                 numberOfRooms++;
                 rooms.Add(newRoom);
@@ -237,11 +240,45 @@ public class GameMap : MonoBehaviour
 
     void CreateEntity(int x, int y, int entityNumber)
     {
-        GameObject entity = Instantiate(enemy[entityNumber], new Vector2(x, y), Quaternion.identity, gameObject.transform.GetChild(1));
-        entity.name = enemy[entityNumber].name;
+        GameObject entity = Instantiate(enemyPrefab[entityNumber], new Vector2(x, y), Quaternion.identity, gameObject.transform.GetChild(1));
+        entity.name = enemyPrefab[entityNumber].name;
         //entity.entityNumber = entityNumber;
 
         entities.Add(entity);
+    }
+
+    void PlaceItems(RectInt rectInt)
+    {
+        for (int i = 0; i <= Random.Range(0, maxItemsPerRoom); i++)
+        {
+            int x = Random.Range(rectInt.x, rectInt.x + rectInt.width);
+            int y = Random.Range(rectInt.y, rectInt.y + rectInt.height);
+
+            foreach (GameObject item in items)
+            {
+                if (item.transform.position.x == x && item.transform.position.y == y) { return; }
+            }
+
+            {
+                if (Random.Range(0, 100) > 80)
+                {
+                    CreateItem(x, y, 1);
+                }
+                else
+                {
+                    CreateItem(x, y, 0);
+                }
+            }
+        }
+    }
+
+    void CreateItem(int x, int y, int itemNumber)
+    {
+        GameObject itemObject = Instantiate(itemPrefab[itemNumber], new Vector2(x, y), Quaternion.identity, gameObject.transform.GetChild(2));
+        itemObject.name = itemPrefab[itemNumber].name;
+        //entity.entityNumber = entityNumber;
+
+        items.Add(itemObject);
     }
 
 
@@ -326,6 +363,10 @@ public class GameMap : MonoBehaviour
         {
             entity.GetComponent<TextMeshPro>().enabled = false;
         }
+        foreach (GameObject item in items)
+        {
+            item.GetComponent<TextMeshPro>().enabled = false;
+        }
 
         for (int x = 0; x < mapWidth; x++)
         {
@@ -340,6 +381,13 @@ public class GameMap : MonoBehaviour
                         {
                             entity.GetComponent<TextMeshPro>().enabled = true;
                         }                        
+                    }
+                    foreach (GameObject item in items)
+                    {
+                        if (item.transform.position.x == x && item.transform.position.y == y)
+                        {
+                            item.GetComponent<TextMeshPro>().enabled = true;
+                        }
                     }
                 }
             }

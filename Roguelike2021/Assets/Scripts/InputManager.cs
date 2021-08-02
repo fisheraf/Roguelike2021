@@ -6,13 +6,11 @@ public class InputManager : MonoBehaviour
 {
     float timer;
     [SerializeField] Entity player;
-    GameMap gameMap;
-    GameStates gameStates;
+    Engine engine;
 
     private void Awake()
     {
-        gameMap = FindObjectOfType<GameMap>();
-        gameStates = FindObjectOfType<GameStates>();
+        engine = GetComponent<Engine>();
     }
 
 
@@ -27,31 +25,36 @@ public class InputManager : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if (timer > .2 && gameStates.gameState == GameStates.GameState.PlayerTurn)
+        if (timer > 0 && engine.gameStates.gameState == GameStates.GameState.PlayerTurn)
         {
             PlayerMovement();
+            Actions();
+        }
+        if(timer > .01 && engine.gameStates.gameState == GameStates.GameState.DropItem)
+        {
+            DropItem();
         }
     }
 
     void PlayerMovement()
     {
         //down left
-        if (Input.GetKey(KeyCode.Keypad1))
+        if (Input.GetKeyDown(KeyCode.Keypad1))
         {
             player.Move(-1, -1);
         }
         //down
-        if (Input.GetKey(KeyCode.Keypad2))
+        if (Input.GetKeyDown(KeyCode.Keypad2))
         {
             player.Move(0, -1);
         }
         //down right
-        if (Input.GetKey(KeyCode.Keypad3))
+        if (Input.GetKeyDown(KeyCode.Keypad3))
         {
             player.Move(1, -1);
         }
         //left
-        if (Input.GetKey(KeyCode.Keypad4))
+        if (Input.GetKeyDown(KeyCode.Keypad4))
         {
             player.Move(-1, 0);
         }
@@ -61,30 +64,145 @@ public class InputManager : MonoBehaviour
             player.Move(0, 0);
         }
         //right
-        if (Input.GetKey(KeyCode.Keypad6))
+        if (Input.GetKeyDown(KeyCode.Keypad6))
         {
             player.Move(1, 0);
         }
         //up left
-        if (Input.GetKey(KeyCode.Keypad7))
+        if (Input.GetKeyDown(KeyCode.Keypad7))
         {
             player.Move(-1, 1);
         }
         //up
-        if (Input.GetKey(KeyCode.Keypad8))
+        if (Input.GetKeyDown(KeyCode.Keypad8))
         {
             player.Move(0, 1);
         }
         //up right
-        if (Input.GetKey(KeyCode.Keypad9))
+        if (Input.GetKeyDown(KeyCode.Keypad9))
         {
             player.Move(1, 1);
         }
-        //delay input
-        if (Input.anyKey)
+    }
+
+    void Actions() 
+    {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            engine.inventory.PickUpItem();
+        }
+        if (Input.GetKeyDown(KeyCode.D))
         {
             timer = 0;
-            gameMap.FOV();//switch to player turn end
+            engine.gameStates.ChangeGameState(GameStates.GameState.DropItem);
+        }
+
+        
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            engine.inventory.UseItem(0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            engine.inventory.UseItem(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            engine.inventory.UseItem(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            engine.inventory.UseItem(3);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            engine.inventory.UseItem(4);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            engine.inventory.UseItem(5);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            engine.inventory.UseItem(6);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            engine.inventory.UseItem(7);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            engine.inventory.UseItem(8);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            engine.inventory.UseItem(9);
+        }
+        if (Input.GetKeyDown(KeyCode.Minus))
+        {
+            engine.inventory.UseItem(10);
+        }
+        if (Input.GetKeyDown(KeyCode.Equals))
+        {
+            engine.inventory.UseItem(11);
+        }        
+    }
+
+    void DropItem()
+    {
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            timer = 0;
+            engine.gameStates.ChangeGameState(GameStates.GameState.PlayerTurn);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            engine.inventory.DropItem(0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            engine.inventory.DropItem(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            engine.inventory.DropItem(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            engine.inventory.DropItem(3);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            engine.inventory.DropItem(4);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            engine.inventory.DropItem(5);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            engine.inventory.DropItem(6);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            engine.inventory.DropItem(7);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            engine.inventory.DropItem(8);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            engine.inventory.DropItem(9);
+        }
+        if (Input.GetKeyDown(KeyCode.Minus))
+        {
+            engine.inventory.DropItem(10);
+        }
+        if (Input.GetKeyDown(KeyCode.Equals))
+        {
+            engine.inventory.DropItem(11);
         }
     }
 }
