@@ -10,6 +10,8 @@ public class Entity : MonoBehaviour
 
     public bool hasActed = true;
     public bool isDead = false;
+    public bool isConfused = false;
+    public int confusedTurnsLeft;
 
     Engine engine;
 

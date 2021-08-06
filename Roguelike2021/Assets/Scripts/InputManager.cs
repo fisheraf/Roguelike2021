@@ -34,6 +34,13 @@ public class InputManager : MonoBehaviour
         {
             DropItem();
         }
+        /*if(engine.gameStates.gameState == GameStates.GameState.Targeting)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                engine.gameStates.ChangeGameState(GameStates.GameState.PlayerTurn);
+            }
+        }*/
     }
 
     void PlayerMovement()

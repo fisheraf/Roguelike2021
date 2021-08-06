@@ -6,8 +6,10 @@ public class GameStates : MonoBehaviour
 {
     Engine engine;
 
-    public enum GameState { PlayerTurn, EnemyTurn, DropItem}
+    public enum GameState { PlayerTurn, EnemyTurn, DropItem, Targeting}
     public GameState gameState = GameState.PlayerTurn;
+
+    GameState lastState;
 
     private void Start()
     {
@@ -16,6 +18,7 @@ public class GameStates : MonoBehaviour
 
     public void ChangeGameState(GameState gs)
     {
+        lastState = gameState;
         gameState = gs;
         if(gs == GameState.EnemyTurn)
         {
@@ -23,6 +26,11 @@ public class GameStates : MonoBehaviour
             engine.enemyManager.EnemyTurn();
         }
 
-        Debug.Log("Game state change to " + gs);
+        //Debug.Log("Game state change to " + gs);
+    }
+
+    public void LastGameState()
+    {
+        ChangeGameState(lastState);
     }
 }

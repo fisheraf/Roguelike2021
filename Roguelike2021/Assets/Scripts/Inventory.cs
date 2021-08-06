@@ -35,7 +35,7 @@ public class Inventory : MonoBehaviour
                         inventorySlots[i].color = item.GetComponent<TextMeshPro>().color;
                         break;
                     }
-                    if (i == inventorySlots.Length)
+                    if (i == inventorySlots.Length - 1)
                     {
                         Debug.Log("Inventory full.");
                         return;
@@ -67,8 +67,7 @@ public class Inventory : MonoBehaviour
         try
         {
             if (inventory[number].GetComponent<Item>().UseItem())
-            {
-                
+            {                
                 inventory.Remove(inventory[number]);                
                 SetUIOrder();
                 engine.gameStates.ChangeGameState(GameStates.GameState.EnemyTurn);
@@ -100,7 +99,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    void SetUIOrder()
+    public void SetUIOrder()
     {
         foreach (TextMeshProUGUI slot in inventorySlots)
         {

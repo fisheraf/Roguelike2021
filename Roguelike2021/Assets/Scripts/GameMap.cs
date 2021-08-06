@@ -260,13 +260,26 @@ public class GameMap : MonoBehaviour
             }
 
             {
-                if (Random.Range(0, 100) > 80)
+                int r = Random.Range(0, 200);
+                if (r > 100)
+                {
+                    CreateItem(x, y, 4);
+                }
+                else if (r > 75)
+                {
+                    CreateItem(x, y, 3);
+                }
+                else if (r > 50)
+                {
+                    CreateItem(x, y, 2);
+                }
+                else if (r > 25)
                 {
                     CreateItem(x, y, 1);
                 }
                 else
                 {
-                    CreateItem(x, y, 0);
+                    CreateItem(x, y,0);
                 }
             }
         }

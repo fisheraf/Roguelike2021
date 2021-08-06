@@ -51,19 +51,6 @@ public class UIManager : MonoBehaviour
         bool mouseIsOverSomething = false;
 
         //foreach player, item, dead entity other object that dont have entity
-        foreach (GameObject entity in engine.gameMap.entities)
-        {
-            if (entity.transform.position.Equals(worldPoint))
-            {                
-                if (engine.gameMap.map[worldPointInt.x, worldPointInt.y].visible)
-                {
-                    MouseOverText(entity.GetComponent<Entity>().name);
-                    mouseIsOverSomething = true;
-
-                    //flavor text?
-                }
-            }
-        }
         foreach (GameObject item in engine.gameMap.items)
         {
             if (item.transform.position.Equals(worldPoint))
@@ -85,6 +72,21 @@ public class UIManager : MonoBehaviour
                 mouseIsOverSomething = true;
 
                 //flavor text?
+            }
+        }
+
+        foreach (GameObject entity in engine.gameMap.entities)
+        {
+            //if (entity.transform.position.Equals(worldPoint))   z error
+            if (entity.transform.position.x == worldPoint.x && entity.transform.position.y == worldPoint.y)
+            {
+                if (engine.gameMap.map[worldPointInt.x, worldPointInt.y].visible)
+                {
+                    MouseOverText(entity.GetComponent<Entity>().name);
+                    mouseIsOverSomething = true;
+
+                    //flavor text?
+                }
             }
         }
 

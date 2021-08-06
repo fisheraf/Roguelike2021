@@ -11,6 +11,7 @@ public class Engine : MonoBehaviour
     public UIManager uIManager;
     public Inventory inventory;
     public EnemyManager enemyManager;
+    public Targeting targeting;
 
     private void Awake()
     {
@@ -21,6 +22,7 @@ public class Engine : MonoBehaviour
         uIManager = GetComponent<UIManager>();
         inventory = GetComponent<Inventory>();
         enemyManager = GetComponent<EnemyManager>();
+        targeting = GetComponent<Targeting>();
     }
 
     // Start is called before the first frame update
