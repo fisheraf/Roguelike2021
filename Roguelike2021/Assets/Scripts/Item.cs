@@ -6,6 +6,7 @@ using System;
 
 public class Item : MonoBehaviour
 {
+    public int itemNumber;
     [SerializeField] string chararacter = null;
     [SerializeField] Color color = Color.white;
     

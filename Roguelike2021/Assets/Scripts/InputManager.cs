@@ -5,7 +5,6 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     float timer;
-    [SerializeField] Entity player;
     Engine engine;
 
     private void Awake()
@@ -22,10 +21,10 @@ public class InputManager : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {   
         timer += Time.deltaTime;
 
-        if (timer > 0 && engine.gameStates.gameState == GameStates.GameState.PlayerTurn)
+        if (timer > .01 && engine.gameStates.gameState == GameStates.GameState.PlayerTurn)
         {
             PlayerMovement();
             Actions();
@@ -48,47 +47,47 @@ public class InputManager : MonoBehaviour
         //down left
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
-            player.Move(-1, -1);
+            engine.player.GetComponent<Entity>().Move(-1, -1);
         }
         //down
         if (Input.GetKeyDown(KeyCode.Keypad2))
         {
-            player.Move(0, -1);
+            engine.player.GetComponent<Entity>().Move(0, -1);
         }
         //down right
         if (Input.GetKeyDown(KeyCode.Keypad3))
         {
-            player.Move(1, -1);
+            engine.player.GetComponent<Entity>().Move(1, -1);
         }
         //left
         if (Input.GetKeyDown(KeyCode.Keypad4))
         {
-            player.Move(-1, 0);
+            engine.player.GetComponent<Entity>().Move(-1, 0);
         }
         //wait
         if (Input.GetKeyDown(KeyCode.Keypad5))
         {
-            player.Move(0, 0);
+            engine.player.GetComponent<Entity>().Move(0, 0);
         }
         //right
         if (Input.GetKeyDown(KeyCode.Keypad6))
         {
-            player.Move(1, 0);
+            engine.player.GetComponent<Entity>().Move(1, 0);
         }
         //up left
         if (Input.GetKeyDown(KeyCode.Keypad7))
         {
-            player.Move(-1, 1);
+            engine.player.GetComponent<Entity>().Move(-1, 1);
         }
         //up
         if (Input.GetKeyDown(KeyCode.Keypad8))
         {
-            player.Move(0, 1);
+            engine.player.GetComponent<Entity>().Move(0, 1);
         }
         //up right
         if (Input.GetKeyDown(KeyCode.Keypad9))
         {
-            player.Move(1, 1);
+            engine.player.GetComponent<Entity>().Move(1, 1);
         }
     }
 
@@ -152,7 +151,16 @@ public class InputManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Equals))
         {
             engine.inventory.UseItem(11);
-        }        
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            engine.SaveProgress();
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            engine.LoadProgress();
+        }
     }
 
     void DropItem()

@@ -183,6 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7c48781302e830409ecd2e0a6bd5355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemNumber: 3
   chararacter: '#'
   color: {r: 1, g: 0.3529681, b: 0, a: 1}
   value: 20

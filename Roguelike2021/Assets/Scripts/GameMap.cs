@@ -33,6 +33,7 @@ public class GameMap : MonoBehaviour
 
     Grid2 grid2;
 
+    public GameObject playerObject;
     public GameObject player;
 
     [Tooltip("Place enemy gameobjects here")]
@@ -45,8 +46,7 @@ public class GameMap : MonoBehaviour
     Engine engine;
 
     private void Awake()
-    {
-        player = GameObject.Find("Player");//going to create and place later
+    {        
         grid2 = GetComponent<Grid2>();
         engine = GetComponent<Engine>();
 
@@ -122,8 +122,9 @@ public class GameMap : MonoBehaviour
 
                 if (numberOfRooms == 0)
                 {
-                    player.transform.position = new Vector2((int)newRoomRect.center.x, (int)newRoomRect.center.y);
-                    entities.Add(player);
+                    //player.transform.position = new Vector2((int)newRoomRect.center.x, (int)newRoomRect.center.y);
+                    CreatePlayer((int)newRoomRect.center.x, (int)newRoomRect.center.y, 0, 100, 100, 1, 5);                    
+                    PlaceItems(newRoomRect);
                 }
                 else
                 {
@@ -146,7 +147,7 @@ public class GameMap : MonoBehaviour
                 }
 
                 PlaceEntities(newRoomRect);
-                PlaceItems(newRoomRect);
+                //PlaceItems(newRoomRect);
 
                 numberOfRooms++;
                 rooms.Add(newRoom);
@@ -175,7 +176,7 @@ public class GameMap : MonoBehaviour
             }
         }
     }
-    void FillMap()
+    public void FillMap()
     {
         for (int x = 0; x < mapWidth; x++)
         {
@@ -213,6 +214,24 @@ public class GameMap : MonoBehaviour
         }
     }
 
+    public void CreatePlayer(int x, int y, int z, int HP, int maxHP, int defense, int power)
+    {
+        player = Instantiate(playerObject, new Vector3(x, y, z), Quaternion.identity);
+        player.name = "Player";
+
+        entities.Add(player);
+
+        Fighter fighter = player.GetComponent<Fighter>();
+        fighter.maxHP = maxHP;
+        fighter.HP = HP;
+        fighter.baseDefense = defense;
+        fighter.basePower = power;
+
+        //.SetPlayer();
+        //FindObjectOfType<LevelUp>().SetPlayer();
+    }
+
+
     void PlaceEntities(RectInt rectInt)
     {
         for (int i = 0; i <= Random.Range(0, maxMonstersPerRoom); i++)
@@ -238,7 +257,7 @@ public class GameMap : MonoBehaviour
         }
     }
 
-    void CreateEntity(int x, int y, int entityNumber)
+    public void CreateEntity(int x, int y, int entityNumber)
     {
         GameObject entity = Instantiate(enemyPrefab[entityNumber], new Vector2(x, y), Quaternion.identity, gameObject.transform.GetChild(1));
         entity.name = enemyPrefab[entityNumber].name;
@@ -285,7 +304,7 @@ public class GameMap : MonoBehaviour
         }
     }
 
-    void CreateItem(int x, int y, int itemNumber)
+    public void CreateItem(int x, int y, int itemNumber)
     {
         GameObject itemObject = Instantiate(itemPrefab[itemNumber], new Vector2(x, y), Quaternion.identity, gameObject.transform.GetChild(2));
         itemObject.name = itemPrefab[itemNumber].name;

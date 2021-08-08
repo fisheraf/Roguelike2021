@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     public Engine engine;
 
     public TextMeshProUGUI[] messageLog;
+    public List<string> messageLogList = new List<string>();
 
     public Slider healthSlider;
     public TextMeshProUGUI healthValues;
@@ -20,13 +21,15 @@ public class UIManager : MonoBehaviour
         engine = GetComponent<Engine>();
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         MouseOverTooltips();
     }
 
     public void NewMessage(string message)
     {
+        messageLogList.Add(message);
+
         for (int i = messageLog.Length - 1; i > 0; i--)
         {
             messageLog[i].text = messageLog[i - 1].text;
@@ -115,5 +118,14 @@ public class UIManager : MonoBehaviour
     public void MouseOverText(string text)
     {
         entityText.text = text;
+    }
+
+    public void ClearMessages()
+    {
+        messageLogList.Clear();
+        foreach (TextMeshProUGUI tm in messageLog)
+        {
+            tm.text = "";
+        }
     }
 }

@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
-{
-    public Transform target;
+{    
     public float speed = 1f;
     public Vector3[] path;
     int targetIndex;
+    Engine engine;
     Entity entity;
-    GameMap gameMap;
 
 
     void Start()
-    {  
-        target = GameObject.Find("Player").transform;
-        entity = GetComponent<Entity>();
-        gameMap = FindObjectOfType<GameMap>();        
+    {
+        engine = FindObjectOfType<Engine>();
+        entity = GetComponent<Entity>();       
     }
 
     private void Update()
@@ -26,7 +24,7 @@ public class Unit : MonoBehaviour
 
     public void RequestPathForUnit()
     {        
-        path = FindObjectOfType<PathFinding>().FindPath(transform.position, target.position);        
+        path = FindObjectOfType<PathFinding>().FindPath(transform.position, engine.player.transform.position);        
     }
 
 

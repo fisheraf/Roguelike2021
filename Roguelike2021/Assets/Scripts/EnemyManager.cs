@@ -10,7 +10,6 @@ public class EnemyManager : MonoBehaviour
     Grid2 grid2;
 
     List<GameObject> entities;
-    GameObject player;
 
 
     private void Start()
@@ -19,7 +18,6 @@ public class EnemyManager : MonoBehaviour
         grid2 = FindObjectOfType<Grid2>();
 
         entities = engine.gameMap.entities;
-        player = engine.player;
     }
 
 
@@ -78,7 +76,7 @@ public class EnemyManager : MonoBehaviour
                 List<Node> neighbors = grid2.GetNeighbours(new Node(true, entity.transform.position, (int)entity.transform.position.x, (int)entity.transform.position.y));
                 foreach (Node neighbor in neighbors)
                 {                            
-                    if ((Vector2)player.transform.position == (Vector2)neighbor.worldPosition)
+                    if ((Vector2)engine.player.transform.position == (Vector2)neighbor.worldPosition)
                     {
                         playerInRange = true;
                     }
@@ -87,7 +85,7 @@ public class EnemyManager : MonoBehaviour
                 if (playerInRange && !entity.GetComponent<Entity>().hasActed)
                 {
                     //Debug.Log(entity.name + " attacks player");
-                    entity.GetComponent<Fighter>().attack(player.GetComponent<Fighter>());
+                    entity.GetComponent<Fighter>().attack(engine.player.GetComponent<Fighter>());
                     entity.GetComponent<Entity>().hasActed = true;
                     continue;
                 }

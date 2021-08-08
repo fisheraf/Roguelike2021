@@ -5,8 +5,10 @@ using TMPro;
 
 public class Entity : MonoBehaviour
 {
+    public int entityNumber;
     [SerializeField] string chararacter = null;
     [SerializeField] Color color = Color.white;
+    
 
     public bool hasActed = true;
     public bool isDead = false;
