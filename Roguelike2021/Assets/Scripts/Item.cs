@@ -66,6 +66,7 @@ public class Item : MonoBehaviour
             foreach (GameObject entity in engine.gameMap.entities)
             {
                 if (entity.name == "Player") { continue; }
+                if (entity.GetComponent<Entity>().isDead) { continue; }
                 if (engine.gameMap.map[(int)entity.transform.position.x, (int)entity.transform.position.y].visible)
                 {
                     int distanceToEntity = engine.gameMap.DiagDistance((int)engine.player.transform.position.x, (int)engine.player.transform.position.y, (int)entity.transform.position.x, (int)entity.transform.position.y);

@@ -42,10 +42,10 @@ public class Fighter : MonoBehaviour
         {
             if (name != "Player")
             {
-                //uiManager.NewMessage("The " + this.GetComponent<Entity>().name + " dies.");
-                //FindObjectOfType<Player>().GetComponent<Level>().addXP(XP);
-                //uiManager.NewMessage("You gain " + XP + " experience.");
-                GetComponent<Entity>().KillEntity();
+                uiManager.NewMessage("The " + name + " dies."); 
+                uiManager.NewMessage("You gain " + XP + " experience.");
+                uiManager.GetComponent<LevelManager>().addXP(XP);                
+                GetComponent<Entity>().KillEntity();                
             }
             else if (name == "Player")
             {

@@ -33,8 +33,11 @@ public class GameMap : MonoBehaviour
 
     Grid2 grid2;
 
-    public GameObject playerObject;
+    [SerializeField] GameObject playerObject;
     public GameObject player;
+
+    [SerializeField] GameObject stairs;
+    GameObject stairsObject;
 
     [Tooltip("Place enemy gameobjects here")]
     public GameObject[] enemyPrefab;
@@ -43,12 +46,16 @@ public class GameMap : MonoBehaviour
     public List<GameObject> entities = new List<GameObject>();
     public List<GameObject> items = new List<GameObject>();
 
+    public int dungeonLevel = 0;
+
     Engine engine;
+    UIManager uIManager;
 
     private void Awake()
     {        
         grid2 = GetComponent<Grid2>();
         engine = GetComponent<Engine>();
+        uIManager = GetComponent<UIManager>();
 
         map = new Tile[mapWidth, mapHeight];
 
@@ -95,7 +102,7 @@ public class GameMap : MonoBehaviour
             int x = Random.Range(1, mapWidth - w - 1);//stopped left side edge cases
             int y = Random.Range(0, mapHeight - h - 2);//stopped top side edge cases
 
-            //added spacing between rooms
+            //added spacing between roomss
             Rect newRoom = new Rect(x - 1, y + 1, w + 2, h + 2);
 
             //check overlapping rooms
@@ -122,9 +129,14 @@ public class GameMap : MonoBehaviour
 
                 if (numberOfRooms == 0)
                 {
-                    //player.transform.position = new Vector2((int)newRoomRect.center.x, (int)newRoomRect.center.y);
-                    CreatePlayer((int)newRoomRect.center.x, (int)newRoomRect.center.y, 0, 100, 100, 1, 5);                    
-                    PlaceItems(newRoomRect);
+                    if(dungeonLevel == 0)
+                    {
+                        CreatePlayer((int)newRoomRect.center.x, (int)newRoomRect.center.y, 0, 100, 100, 1, 5);
+                    }
+                    else
+                    {
+                        player.transform.position = new Vector3((int)newRoomRect.center.x, (int)newRoomRect.center.y, 0);
+                    }
                 }
                 else
                 {
@@ -147,12 +159,14 @@ public class GameMap : MonoBehaviour
                 }
 
                 PlaceEntities(newRoomRect);
-                //PlaceItems(newRoomRect);
+                PlaceItems(newRoomRect);
 
                 numberOfRooms++;
                 rooms.Add(newRoom);
             }
         }
+
+        PlaceStairs(rooms[rooms.Count -1]);
 
         timer.Stop();
         Debug.Log("Creating map took:" + timer.Elapsed);
@@ -313,6 +327,28 @@ public class GameMap : MonoBehaviour
         items.Add(itemObject);
     }
 
+    void PlaceStairs(Rect room)
+    {
+        RectInt newRoomRect = new RectInt(Mathf.RoundToInt(room.xMin + 1),
+                    Mathf.RoundToInt(room.yMin + 1),
+                    Mathf.RoundToInt(room.width - 2),
+                    Mathf.RoundToInt(room.height - 2));
+        int x = Random.Range(newRoomRect.x, newRoomRect.x + newRoomRect.width);
+        int y = Random.Range(newRoomRect.y, newRoomRect.y + newRoomRect.height);
+
+        if (stairsObject == null)
+        {
+            stairsObject = Instantiate(stairs, new Vector3(x, y, -1), Quaternion.identity, transform);
+            stairsObject.name = "Stairs";
+            stairsObject.GetComponent<TextMeshPro>().enabled = false;
+        }
+        else
+        {
+            stairsObject.transform.position = new Vector3(x, y, -1);
+            stairsObject.GetComponent<TextMeshPro>().enabled = false;
+        }
+    }
+
 
     public Tuple<bool, string> IsBlocked(int x, int y)
     {
@@ -385,6 +421,19 @@ public class GameMap : MonoBehaviour
         }
     }
 
+    void ClearExploredTiles()
+    {
+        for (int x = 0; x < mapWidth; x++)
+        {
+            for (int y = 0; y < mapHeight; y++)
+            {
+                map[x, y].explored = false;
+                //map[x, y].hasEntity = false;
+                //map[x, y].walkable = true;
+            }
+        }
+    }
+
 
     void RenderTiles()//don't render whole map?
     {
@@ -420,6 +469,10 @@ public class GameMap : MonoBehaviour
                         {
                             item.GetComponent<TextMeshPro>().enabled = true;
                         }
+                    }
+                    if(stairsObject.transform.position.x == x && stairsObject.transform.position.y == y)
+                    {                        
+                        stairsObject.GetComponent<TextMeshPro>().enabled = true;
                     }
                 }
             }
@@ -458,10 +511,44 @@ public class GameMap : MonoBehaviour
         foreach (GameObject entity in entities)
         {
             if(entity.name == "Player") { continue; }
+            if(entity.GetComponent<Entity>().isDead) { continue; }
             
             map[(int)entity.transform.position.x, (int)entity.transform.position.y].walkable = false;
         }
 
         grid2.UpdateGrid();
+    }
+
+    public void UseStairs()
+    {
+        if(player.transform.position.x == stairsObject.transform.position.x && player.transform.position.y == stairsObject.transform.position.y)
+        {
+            uIManager.NewMessage("You delve deeper into the dungeon!");
+            dungeonLevel++;
+            NewMap();
+            //give enemy turn?
+        }
+        else
+        {
+            uIManager.NewMessage("There are no stairs here.");
+        }        
+    }
+
+    private void NewMap()
+    {
+        foreach (GameObject e in entities)
+        {
+            if(e.name == "Player") { continue; }
+            Destroy(e);
+        }
+        entities.Clear();
+        foreach (GameObject i in items)
+        {
+            Destroy(i);
+        }
+        items.Clear();
+
+        ClearExploredTiles();
+        MakeMap(maxNumberOfRooms, minRoomSize, maxRoomSize, mapWidth, mapHeight);
     }
 }

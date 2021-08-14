@@ -40,6 +40,10 @@ public class InputManager : MonoBehaviour
                 engine.gameStates.ChangeGameState(GameStates.GameState.PlayerTurn);
             }
         }*/
+        if (timer > .01 && engine.gameStates.gameState == GameStates.GameState.LevelUp)
+        {
+            LevelUpOptions();
+        }
     }
 
     void PlayerMovement()
@@ -153,6 +157,12 @@ public class InputManager : MonoBehaviour
             engine.inventory.UseItem(11);
         }
 
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            engine.gameMap.UseStairs();
+        }
+
+
         if (Input.GetKeyDown(KeyCode.S))
         {
             engine.SaveProgress();
@@ -218,6 +228,22 @@ public class InputManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Equals))
         {
             engine.inventory.DropItem(11);
+        }
+    }
+
+    void LevelUpOptions()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            engine.levelManager.StatChange(0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            engine.levelManager.StatChange(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            engine.levelManager.StatChange(2);
         }
     }
 }

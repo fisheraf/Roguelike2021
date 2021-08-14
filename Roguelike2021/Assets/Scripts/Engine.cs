@@ -15,6 +15,7 @@ public class Engine : MonoBehaviour
     public Inventory inventory;
     public EnemyManager enemyManager;
     public Targeting targeting;
+    public LevelManager levelManager;
 
 
     int totalTiles;
@@ -33,6 +34,7 @@ public class Engine : MonoBehaviour
         inventory = GetComponent<Inventory>();
         enemyManager = GetComponent<EnemyManager>();
         targeting = GetComponent<Targeting>();
+        levelManager = GetComponent<LevelManager>();
     }
 
     // Start is called before the first frame update

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class UIManager : MonoBehaviour
     public Slider healthSlider;
     public TextMeshProUGUI healthValues;
     public TextMeshProUGUI entityText;
+
+    public GameObject inventoryPanel;
+    public GameObject levelPanel;
 
 
     private void Start()
@@ -127,5 +131,23 @@ public class UIManager : MonoBehaviour
         {
             tm.text = "";
         }
+    }
+
+    public void OpenLevelPanel()
+    {
+        inventoryPanel.transform.DORotate(new Vector3(0, -90, 0), .5f);
+        inventoryPanel.SetActive(false);
+        levelPanel.SetActive(true);
+        levelPanel.transform.rotation = Quaternion.Euler(0, 90, 0);
+        levelPanel.transform.DORotate(new Vector3(0, 0, 0), .5f);
+    }
+
+    public void OpenInventoryPanel()
+    {
+        levelPanel.transform.DORotate(new Vector3(0, -90, 0), .5f);
+        levelPanel.SetActive(false);
+        inventoryPanel.SetActive(true);
+        inventoryPanel.transform.rotation = Quaternion.Euler(0, 90, 0);
+        inventoryPanel.transform.DORotate(new Vector3(0, 0, 0), .5f);
     }
 }

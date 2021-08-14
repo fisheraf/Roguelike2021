@@ -47,6 +47,7 @@ public class Entity : MonoBehaviour
                         engine.gameStates.ChangeGameState(GameStates.GameState.EnemyTurn);
                         return;
                     }
+                    if (entity.GetComponent<Entity>().isDead) { continue; }
 
                     //Debug.Log("You tickle the " + entity.name + ".");
                     GetComponent<Fighter>().attack(entity.GetComponent<Fighter>());
@@ -70,7 +71,7 @@ public class Entity : MonoBehaviour
         textMeshPro.color = Color.red;
 
         name = "Dead " + name;
-        engine.gameMap.entities.Remove(this.gameObject);
+        //engine.gameMap.entities.Remove(this.gameObject);
         //FindObjectOfType<GameMap>().deadEntities.Add(gameObject);
         isDead = true;
         engine.gameMap.UpdateWalkable();

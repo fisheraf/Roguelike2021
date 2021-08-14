@@ -185,9 +185,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de4ddb937c755344cb7fe60cce716877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entityNumber: 0
   chararacter: g
   color: {r: 0.023272192, g: 0.5754717, b: 0.008143453, a: 1}
-  entityNumber: 0
   hasActed: 1
   isDead: 0
   isConfused: 0
@@ -204,7 +204,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcf036bf5729c944e817f4fb54556a4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   speed: 1
   path: []
 --- !u!114 &-8745062652299905430
@@ -221,9 +220,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 0
   bonusMaxHP: 0
-  HP: 10
+  HP: 7
   baseDefense: 0
   bonusDefense: 0
   basePower: 3
   bonusPower: 0
-  XP: 0
+  XP: 10
