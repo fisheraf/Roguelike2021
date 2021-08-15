@@ -5010,7 +5010,7 @@ MonoBehaviour:
   mapHeight: 50
   maxRoomSize: 10
   minRoomSize: 5
-  maxNumberOfRooms: 50
+  maxNumberOfRooms: 4
   maxMonstersPerRoom: 3
   maxItemsPerRoom: 20
   fovRadius: 8

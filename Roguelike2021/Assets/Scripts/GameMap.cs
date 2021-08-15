@@ -258,15 +258,31 @@ public class GameMap : MonoBehaviour
                 if(entity.transform.position.x == x && entity.transform.position.y == y) { return; }
             }
 
+            ChooseEntity(x, y);
+        }
+    }
+
+    void ChooseEntity(int x, int y)
+    {        
+        int goblinChance = 80 - (10 * dungeonLevel);
+        if(goblinChance <= 0) { goblinChance = 5; }
+        int orcChance = 20 + (10 * dungeonLevel);
+        if (orcChance <= 0) { orcChance = 5; }
+
+        int[] chanceTable = new int[] { goblinChance, orcChance };
+
+        int totalChance = goblinChance + orcChance;
+        int randomChance = Random.Range(0, totalChance);
+        for (int i = 0; i < chanceTable.Length; i++)
+        {
+            if(randomChance <= chanceTable[i])
             {
-                if (Random.Range(0, 100) > 80)
-                {
-                    CreateEntity(x, y, 1);
-                }
-                else
-                {
-                    CreateEntity(x, y, 0);
-                }
+                CreateEntity(x, y, i);
+                return;
+            }
+            else
+            {
+                randomChance -= chanceTable[i];
             }
         }
     }
@@ -292,28 +308,37 @@ public class GameMap : MonoBehaviour
                 if (item.transform.position.x == x && item.transform.position.y == y) { return; }
             }
 
+            ChooseItem(x, y);
+        }
+    }
+
+    void ChooseItem(int x, int y)
+    {
+        int health1Chance = 200 - (30 * dungeonLevel);
+        if (health1Chance <= 0) { health1Chance = 5; }
+        int health2Chance = 100 + (12 * dungeonLevel);
+        if (health2Chance <= 0) { health2Chance = 5; }
+        int lightningChance = 10 + (10 * dungeonLevel);
+        if (lightningChance <= 0) { lightningChance = 0; }
+        int fireballChance = 5 + (3 * dungeonLevel);
+        if (fireballChance <= 0) { fireballChance = 0; }
+        int confusionChance = 0 + (5 * dungeonLevel);
+        if (confusionChance <= 0) { confusionChance = 0; }
+
+        int[] chanceTable = new int[] { health1Chance, health2Chance, lightningChance, fireballChance, confusionChance };
+
+        int totalChance = health1Chance + health2Chance + lightningChance + fireballChance + confusionChance;
+        int randomChance = Random.Range(0, totalChance);
+        for (int i = 0; i < chanceTable.Length; i++)
+        {
+            if (randomChance <= chanceTable[i])
             {
-                int r = Random.Range(0, 200);
-                if (r > 100)
-                {
-                    CreateItem(x, y, 4);
-                }
-                else if (r > 75)
-                {
-                    CreateItem(x, y, 3);
-                }
-                else if (r > 50)
-                {
-                    CreateItem(x, y, 2);
-                }
-                else if (r > 25)
-                {
-                    CreateItem(x, y, 1);
-                }
-                else
-                {
-                    CreateItem(x, y,0);
-                }
+                CreateItem(x, y, i);
+                return;
+            }
+            else
+            {
+                randomChance -= chanceTable[i];
             }
         }
     }

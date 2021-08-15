@@ -67,8 +67,10 @@ public class Inventory : MonoBehaviour
         try
         {
             if (inventory[number].GetComponent<Item>().UseItem())
-            {                
-                inventory.Remove(inventory[number]);                
+            {
+                GameObject item = inventory[number];
+                inventory.Remove(item);
+                Destroy(item);
                 SetUIOrder();
                 engine.gameStates.ChangeGameState(GameStates.GameState.EnemyTurn);
             }
